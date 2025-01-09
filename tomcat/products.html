@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fruits Basket</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <a href="index.html" style="text-decoration: none; color: white;">Fruits Basket</a>
+    </header>
+
+    <!-- Navigation -->
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="products.html">Products</a>
+        <a href="about.html">About</a>
+        <a href="post_list.jsp">Board</a>
+        <div class="topnav-right">
+            <a href="signup.jsp">Sign Up</a>
+            <a href="login.jsp">Login</a>
+        </div>
+    </nav>
+
+    <!-- Main Banner -->
+    <section class="main-banner">
+        <div class="welcome-text">
+            Fruits Basket에 오신 것을 환영합니다! 신선한 과일과 채소를 즐기세요.
+        </div>
+        <div class="banner-image">
+            <img src="./image/Many-kinds-of-fruits-melon-grapes-oranges-mango-apple-kiwi_m.PNG" alt="Fresh Fruits">
+        </div>
+    </section>
+<!-- Product List -->
+<div class="product">
+    <!-- Apple -->
+    <div class="product-item">
+        <img src="./image/apple.jpg" alt="Apple">
+        <h3>Apple</h3>
+        <p>1,300원</p>
+        <p>사과는 비타민 C가 풍부하고, 심장 건강에 좋은 과일입니다. 신선하고 달콤한 맛을 자랑합니다.</p>
+        <button onclick="addToCart('Apple', 1300, 1)">Add to Cart</button>
+    </div>
+    <!-- Banana -->
+    <div class="product-item">
+        <img src="./image/banana.jpg" alt="Banana">
+        <h3>Banana</h3>
+        <p>2,000원</p>
+        <p>바나나는 에너지를 공급하는 좋은 선택입니다. 특히 운동 후에 이상적인 간식입니다.</p>
+        <button onclick="addToCart('Banana', 2000, 1)">Add to Cart</button>
+    </div>
+    <!-- Peach -->
+    <div class="product-item">
+        <img src="./image/pear.png" alt="Peach">
+        <h3>Peach</h3>
+        <p>1,500원</p>
+        <p>복숭아는 달콤하고 부드러운 맛이 특징이며, 풍부한 비타민과 섬유질을 제공합니다.</p>
+        <button onclick="addToCart('Peach', 1500, 1)">Add to Cart</button>
+    </div>
+    <!-- Pear -->
+    <div class="product-item">
+        <img src="./image/pear.jpg" alt="Pear">
+        <h3>Pear</h3>
+        <p>2,900원</p>
+        <p>배는 상큼하고 시원한 맛이 특징이며, 소화에 도움이 되는 섬유질이 풍부합니다.</p>
+        <button onclick="addToCart('Pear', 2900, 1)">Add to Cart</button>
+    </div>
+    <!-- Lemon -->
+    <div class="product-item">
+        <img src="./image/lemon.png" alt="Lemon">
+        <h3>Lemon</h3>
+        <p>1,000원</p>
+        <p>레몬은 비타민 C가 풍부하고 면역력을 강화하는 데 도움이 됩니다. 음료나 요리에 사용하기 좋습니다.</p>
+        <button onclick="addToCart('Lemon', 1000, 1)">Add to Cart</button>
+    </div>
+    <!-- Pineapple -->
+    <div class="product-item">
+        <img src="./image/pineapple.png" alt="Pineapple">
+        <h3>Pineapple</h3>
+        <p>4,000원</p>
+        <p>파인애플은 신선하고 상큼한 맛으로, 비타민 C와 항산화제가 풍부한 열대 과일입니다.</p>
+        <button onclick="addToCart('Pineapple', 4000, 1)">Add to Cart</button>
+    </div>
+    <!-- Avocado -->
+    <div class="product-item">
+        <img src="./image/avocado.jpg" alt="Avocado">
+        <h3>Avocado</h3>
+        <p>2,300원</p>
+        <p>아보카도는 건강한 지방을 포함하고 있으며, 크리미한 질감과 고소한 맛이 특징입니다.</p>
+        <button onclick="addToCart('Avocado', 2300, 1)">Add to Cart</button>
+    </div>
+</div>
+
+<!-- Cart -->
+<section id="cart">
+    <h2>장바구니</h2>
+    <ul id="cart-items"></ul>
+    <p>총합: <span id="total-price">0</span>원</p>
+    <button onclick="clearCart()">장바구니 비우기</button>
+</section>
+
+<!-- Footer -->
+<footer>
+    &copy; 2024 Fruits Basket. All Rights Reserved.
+</footer>
+
+<script>
+    let cart = [];
+    let totalPrice = 0;
+
+    // Add item to cart
+    function addToCart(item, price, quantity) {
+        if (quantity <= 0 || isNaN(price) || isNaN(quantity)) return; // Ignore if quantity or price is not a number or if quantity is 0 or less
+
+        const existingItem = cart.find(cartItem => cartItem.item === item);
+
+        if (existingItem) {
+            existingItem.quantity += quantity; // Increase quantity
+            totalPrice += price * quantity; // Add the total price for the quantity
+        } else {
+            cart.push({ item, price, quantity }); // Add new item with specified quantity
+            totalPrice += price * quantity;
+        }
+        updateCart();
+    }
+
+    // Update the cart display
+    function updateCart() {
+        const cartItems = document.getElementById('cart-items');
+        cartItems.innerHTML = '';
+        cart.forEach((cartItem, index) => {
+            const li = document.createElement('li');
+            li.textContent = `${cartItem.item} - ${cartItem.price.toLocaleString()}원 x ${cartItem.quantity}`;
+            const removeButton = document.createElement('button');
+            removeButton.textContent = '제거';
+            removeButton.onclick = () => removeFromCart(index);
+            li.appendChild(removeButton);
+            cartItems.appendChild(li);
+        });
+        document.getElementById('total-price').textContent = totalPrice.toLocaleString();
+    }
+
+    // Remove item from cart
+    function removeFromCart(index) {
+        totalPrice -= cart[index].price * cart[index].quantity;
+        cart.splice(index, 1);
+        updateCart();
+    }
+
+    // Clear cart
+    function clearCart() {
+        cart = [];
+        totalPrice = 0;
+        updateCart();
+    }
+</script>
